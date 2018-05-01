@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.BusinessMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.Business">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bus_name" jdbcType="VARCHAR" property="bus_name" />
+    <result column="bus_code" jdbcType="BIGINT" property="bus_code" />
+    <result column="bus_url" jdbcType="VARCHAR" property="bus_url" />
+    <result column="bus_img" jdbcType="VARCHAR" property="bus_img" />
+    <result column="bus_content" jdbcType="VARCHAR" property="bus_content" />
+  </resultMap>
+  <!--要查询的字段名 -->
+  <sql id="Base_Column_List">
+  	id, bus_name, bus_code, bus_url, bus_img, bus_content
+  </sql>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <select id="findByPage" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List"/>
+  	FROM business
+  	<if test="startRow != null and pageSize != null">
+  		limit #{startRow} ,#{pageSize}
+  	</if>
+  </select>
+  <!--查询所有数据  -->
+  <select id="selectBusList" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List"/>
+  	FROM business
+  	ORDER BY id DESC
+  </select>
+  <!--查询总记录数 -->
+  <select id="selectCount" parameterType="com.hz.util.PageBean"  resultType="java.lang.Integer">
+  	SELECT count(*) FROM business
+  </select>
+</mapper>

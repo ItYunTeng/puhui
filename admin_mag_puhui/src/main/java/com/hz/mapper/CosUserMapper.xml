@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.CosUserMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.Customer">
+    <id column="c_id" jdbcType="BIGINT" property="c_id" />
+    <result column="c_name" jdbcType="VARCHAR" property="c_name" />
+    <result column="c_code" jdbcType="BIGINT" property="c_code" />
+    <result column="c_phone" jdbcType="VARCHAR" property="c_phone"/>
+    <result column="c_pass" jdbcType="VARCHAR" property="c_pass"/>
+    <result column="c_address" jdbcType="VARCHAR" property="c_address"/>
+  </resultMap>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <sql id="Base_Column_List">
+    c_id, c_name, c_code, c_phone,c_pass,c_address
+  </sql>
+  <!--登陆查询  -->
+  <select id="loginCustomerselect" parameterType="Map" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	FROM customer
+  	WHERE c_code=#{c_code} AND c_pass=#{c_pass}
+  </select>
+</mapper> 

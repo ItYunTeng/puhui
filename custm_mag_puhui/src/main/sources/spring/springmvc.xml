@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mvc="http://www.springframework.org/schema/mvc" 
+  xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+  	 http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+  	 http://www.springframework.org/schema/mvc
+     http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+     
+   	<!--<mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.LoginInterceptor"></bean>
+     	</mvc:interceptor>
+     </mvc:interceptors> -->
+     
+    <!--  <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/json/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.MyInterceptor1"/>
+     	</mvc:interceptor>
+     </mvc:interceptors>
+     <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/json/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.MyInterceptor2"/>
+     	</mvc:interceptor>
+     </mvc:interceptors> -->
+     <!--拦截器  -->
+     <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/**"/>
+     		<bean class="com.hz.interceptor.LoginInterceptor2"></bean>
+     	</mvc:interceptor>
+     </mvc:interceptors>
+     
+    <!-- 启用SpringMVC的注解功能,它会自动注册HandlerMapping、HandlerAdapter、ExceptionResolver的相关实例 -->
+    <mvc:annotation-driven />
+    <!-- SpringMVC的扫描范围 -->
+    <context:component-scan base-package="com.hz" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    
+    <!-- 启用spring mvc 注解 -->
+    <context:annotation-config />
+    <!-- 完成请求和注解POJO的映射 -->
+     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+         <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+     
+	<!-- <mvc:default-servlet-handler/> -->
+    <!-- 注册属性编辑器 -->
+	<!-- <bean id="customPropertyEditor" class="com.hc.binder.CustomPropertyEditor"></bean>  -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+	<!--  -->
+	<bean class="com.hz.exception.MyExceptionHandler"/>
+	
+	
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!-- 转换器 -->
+		<property name="converters">
+			<list>
+				<bean class="com.hz.converter.CustomDateConverter"/>
+				<bean class="com.hz.converter.StringTrimConverter"/>
+			</list>
+		</property>
+	</bean>
+	
+	 <!-- 自定义webBinder -->
+	 <bean id="customBinder"
+		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<!-- <property name="propertyEditorRegistrars">
+			<list>
+				<ref bean="customPropertyEditor"/>
+			</list>
+		</property> -->
+		<property name="conversionService" ref="conversionService" />
+	 </bean>
+
+     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
+     <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
+     
+     <!-- <mvc:annotation-driven /> -->
+     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+	<!--注解适配器 -->
+     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		 <property name="webBindingInitializer" ref="customBinder"></property> 
+		  <property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+			</list>
+		 </property>
+	 </bean>
+     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     	<property name="prefix" value="/WEB-INF/jsp/"/>
+     	<property name="suffix" value=".jsp"/>
+     </bean>
+</beans>

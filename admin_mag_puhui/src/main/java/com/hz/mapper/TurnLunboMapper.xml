@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.TurnLunboMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.Turn_lunbo">
+    <id column="img_id" jdbcType="BIGINT" property="img_id" />
+    <result column="img_src" jdbcType="VARCHAR" property="img_src" />
+    <result column="img_url" jdbcType="VARCHAR" property="img_url" />
+  </resultMap>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <!--插入单个数据  -->
+  <insert id="insertActive" parameterType="com.hz.entity.ActivityContent">
+	insert into activeContent
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test='activeName != null'>
+			activeName,
+		</if>
+		<if test='activeContent != null'>
+			activeContent,
+		</if>
+		<if test='startTime != null'>
+			startTime,
+		</if>
+		<if test='endTime != null'>
+			endTime,
+		</if>
+		<if test='url != null'>
+			url,
+		</if>
+		<if test='imgFile != null'>
+			imgFile,
+		</if>
+		<if test='item_id != null'>
+			item_id,
+		</if>
+		<if test='judgehot != null'>
+			judgehot,
+		</if>
+	</trim> 
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test='activeName != null'>
+			#{activeName},
+		</if>
+		<if test='activeContent != null'>
+			#{activeContent},
+		</if>
+		<if test='startTime != null'>
+			#{startTime},
+		</if>
+		<if test='endTime != null'>
+			#{endTime},
+		</if>
+		<if test='url != null'>
+			#{url},
+		</if>
+		<if test='imgFile != null'>
+			#{imgFile},
+		</if>
+		<if test='item_id != null'>
+			#{item_id},
+		</if>
+		<if test='judgehot != null'>
+			#{judgehot},
+		</if>
+	</trim> 
+  </insert>
+  <sql id="Base_Column_List">
+  	img_id,img_url,img_src
+  </sql>
+    <!--删除轮播  -->
+    <!-- <delete id="deleteActivd" parameterType="com.hz.entity.ActivityContent">
+  		delete from activecontent where active_id=#{active_id}
+  	</delete> -->
+  	
+  	<select id="selectImg" parameterType="com.hz.entity.Turn_lunbo" resultMap="BaseResultMap">
+  		select 
+        <include refid="Base_Column_List" /> 
+       	FROM lunbo
+        order by img_id DESC
+  	</select>
+</mapper>

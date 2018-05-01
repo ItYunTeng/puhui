@@ -1,0 +1,165 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+   	<groupId>com.hz.puhui</groupId>
+  	<artifactId>parent</artifactId>
+  	<version>0.0.3-SNAPSHOT</version>
+  	<relativePath>../parent</relativePath>
+  </parent>
+  
+  <artifactId>admin_mag_puhui</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>admin_mag_puhui</name>
+  <url>http://maven.apache.org</url>
+
+
+  <dependencies>
+  	<dependency>
+	  	<groupId>org.springframework</groupId>
+   		<artifactId>spring-core</artifactId>
+ 		</dependency>
+ 		<dependency>
+	  		<groupId>org.springframework</groupId>
+   		<artifactId>spring-beans</artifactId>
+ 		</dependency>
+ 		<dependency>
+	  		<groupId>org.springframework</groupId>
+   		<artifactId>spring-orm</artifactId>
+ 		</dependency>
+ 		<dependency>
+	  		<groupId>org.springframework</groupId>
+   		<artifactId>spring-context</artifactId>
+ 		</dependency>
+	<dependency>
+	  		<groupId>org.springframework</groupId>
+   		<artifactId>spring-aspects</artifactId>
+ 		</dependency>
+	<dependency>
+ 	  	<groupId>org.springframework</groupId>
+    	<artifactId>spring-test</artifactId>
+  	</dependency>
+	<dependency>
+ 	  	<groupId>org.springframework</groupId>
+    	<artifactId>spring-webmvc</artifactId>
+  	</dependency>
+  	<dependency>
+   		<groupId>javax.servlet</groupId>
+   		<artifactId>jstl</artifactId>
+	</dependency>
+  	<dependency>
+   		<groupId>org.mybatis</groupId>
+   		<artifactId>mybatis-spring</artifactId>
+	</dependency>
+ 		<dependency>
+   		<groupId>log4j</groupId>
+   		<artifactId>log4j</artifactId>
+	</dependency>
+	<dependency>
+   		<groupId>commons-logging</groupId>
+	    <artifactId>commons-logging</artifactId>
+	</dependency>
+	<dependency>
+   		<groupId>mysql</groupId>
+   		<artifactId>mysql-connector-java</artifactId>
+	</dependency>
+	<dependency>
+   		<groupId>commons-dbcp</groupId>
+   		<artifactId>commons-dbcp</artifactId>
+	</dependency>
+   	<dependency>
+   	  <groupId>junit</groupId>
+   	  <artifactId>junit</artifactId>
+   	  <scope>test</scope>
+   	</dependency>
+   	<dependency>
+   		<groupId>org.mybatis</groupId>
+   		<artifactId>mybatis</artifactId>
+	</dependency>
+	<dependency>
+   		<groupId>javax.servlet</groupId>
+    	<artifactId>javax.servlet-api</artifactId>
+    	<scope>provided</scope>
+	</dependency>
+	<dependency>
+	   <groupId>javax.servlet</groupId>
+	   <artifactId>jsp-api</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.taglibs</groupId>
+	    <artifactId>taglibs-standard-impl</artifactId>
+	</dependency>
+	
+	
+	<!-- 上传组件包 -->  
+    <dependency>  
+        <groupId>commons-fileupload</groupId>  
+        <artifactId>commons-fileupload</artifactId>    
+    </dependency>  
+	<dependency>
+		<groupId>org.webjars.bower</groupId>
+		<artifactId>ueditor</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>org.json</groupId>
+		<artifactId>json</artifactId>
+	</dependency>
+
+    <dependency>  
+        <groupId>commons-io</groupId>  
+        <artifactId>commons-io</artifactId>  
+    </dependency>  
+
+    <dependency>  
+        <groupId>commons-codec</groupId>  
+        <artifactId>commons-codec</artifactId>  
+    </dependency>  
+	<!--分页助手  -->
+	<dependency>
+		<groupId>com.github.pagehelper</groupId>
+		<artifactId>pagehelper</artifactId>
+	</dependency>
+
+    <!-- 映入JSON -->  
+    <dependency>  
+        <groupId>org.codehaus.jackson</groupId>  
+        <artifactId>jackson-mapper-asl</artifactId>    
+    </dependency>  
+	
+    <!-- 格式化对象，方便输出日志 -->  
+    <dependency>  
+        <groupId>com.alibaba</groupId>  
+        <artifactId>fastjson</artifactId>  
+    </dependency>  
+
+    <dependency>
+    	<groupId>org.hibernate</groupId>
+    	<artifactId>hibernate-validator</artifactId>
+    	<version>5.4.2.Final</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-databind</artifactId>
+    	<version>2.9.0</version>
+	</dependency>  
+  </dependencies>
+  
+  <build>
+  	<finalName>puhui</finalName>
+  	<plugins>
+	  	<plugin>
+	        <groupId>org.apache.tomcat.maven</groupId>
+	        <artifactId>tomcat7-maven-plugin</artifactId>
+	        <version>2.1</version>
+	        <configuration>
+	          <port>8080</port>
+	          <uriEncoding>UTF-8</uriEncoding>
+	        </configuration>
+	     </plugin>
+  	</plugins>
+  </build>
+</project>

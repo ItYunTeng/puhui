@@ -1,0 +1,15 @@
+INDEX VERSION 1.130
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1895301803.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\538357033.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3446173806.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1498398276.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\286661725.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2215501731.index
+\admin_mag_puhui\src\main\java
+E:\program\puhui\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\678152030.index
+\admin_mag_puhui\src\main\java

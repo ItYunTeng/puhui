@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.First_itemMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.First_item">
+    <id column="item_id" jdbcType="BIGINT" property="item_id" />
+    <result column="item_name" jdbcType="VARCHAR" property="item_name" />
+    <result column="item_code" jdbcType="VARCHAR" property="item_code" />
+    <!--活动的一对多查询 -->
+    	<!-- <collection property="active" ofType="com.hz.entity.ActivityContent">  
+            <id column="active_id" jdbcType="BIGINT" property="active_id" />
+		    <result column="activeName" jdbcType="VARCHAR" property="activeName" />
+		    <result column="activeContent" jdbcType="LONGVARCHAR" property="activeContent" />
+		    <result column="startTime" jdbcType="DATE" property="startTime" />
+		    <result column="endTime" jdbcType="DATE" property="endTime" />
+		    <result column="url" jdbcType="VARCHAR" property="url" />
+		    <result column="imgFile" jdbcType="VARCHAR" property="imgFile" />
+		    <result column="item_id" jdbcType="BIGINT" property="item_id" />
+        </collection>  -->
+  </resultMap>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <sql id="Base_Column_List">
+    item_id,item_code,item_name
+  </sql>
+  <sql id="active_List">
+  	a.active_id, a.activeName, a.startTime, a.endTime, a.imgFile, a.url, a.item_id, a.judgehot, f.item_name, a.activeContent
+  </sql>
+  <!--插入单个数据  -->
+  <insert id="insertItem" parameterType="com.hz.entity.First_item">
+	insert into first_item(
+	item_name,item_code
+	)values(
+	#{item_name},#{item_code})
+  </insert>
+  <!--更新查询数据  -->
+  <update id="updateItem" parameterType="com.hz.entity.First_item">
+  	update first_item set item_name=#{item_name}
+  </update>
+  
+  <!--分页查询  -->
+  <select id="selectAllItem" parameterType="com.hz.entity.Page" resultMap="BaseResultMap">
+        select * from first_item limit #{startRow},#{pageSize}
+  </select>
+  <!--查询搜索总数  -->
+  <select id="searchTotalCount" parameterType="com.hz.entity.Page" resultType="java.lang.Integer">
+        select count(item_id) from first_item <where>
+            <if test="queryCondition!=null">
+                and item_name=#{queryCondition}
+            </if>
+        </where>
+   </select>
+   <!--条件搜索查询  -->
+   <select id="getInvBycondtion" parameterType="com.hz.entity.Page" resultMap="BaseResultMap">
+        select * from first_item
+         <where>
+            <if test="queryCondition!=null">
+                 item_name like  CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+  <!--删除分类-->
+  <delete id="deleteItem" parameterType="com.hz.entity.First_item">
+  	delete from first_item where item_id=#{item_id}
+  </delete>
+  
+  <select id="selectall" parameterType="com.hz.entity.First_item" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from first_item
+  </select>
+</mapper>

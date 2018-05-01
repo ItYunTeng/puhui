@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mvc="http://www.springframework.org/schema/mvc" 
+  xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+  	 http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+  	 http://www.springframework.org/schema/mvc
+     http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+     
+   	<!--<mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.LoginInterceptor"></bean>
+     	</mvc:interceptor>
+     </mvc:interceptors> -->
+     
+    <!--  <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/json/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.MyInterceptor1"/>
+     	</mvc:interceptor>
+     </mvc:interceptors>
+     <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/json/**"/>
+     		<bean class="com.hc.ssm.controller.interceptor.MyInterceptor2"/>
+     	</mvc:interceptor>
+     </mvc:interceptors> -->
+     <!--拦截器  -->
+  	<!--  <mvc:interceptors>
+     	<mvc:interceptor>
+     		<mvc:mapping path="/**"/>
+     		<bean class="com.hz.interceptor.LoginInterceptor2"></bean>
+     	</mvc:interceptor>
+     </mvc:interceptors> -->
+     
+    <!-- 启用SpringMVC的注解功能,它会自动注册HandlerMapping、HandlerAdapter、ExceptionResolver的相关实例 -->
+    <mvc:annotation-driven/>
+    <!-- SpringMVC的扫描范围 -->
+    <context:component-scan base-package="com.hz" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    
+    <!-- 启用spring mvc 注解 -->
+    <context:annotation-config />
+    <!-- 完成请求和注解POJO的映射 -->
+   <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+         <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter" />
+            </list>
+        </property>
+    </bean> -->
+     
+	<!-- <mvc:default-servlet-handler/> -->
+    <!-- 注册属性编辑器 -->
+	<bean id="customPropertyEditor" class="com.hz.converter.CustomPropertyEditor"></bean> 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+	<!-- 只有一个全局异常处理器起作用 -->
+	<bean class="com.hz.exception.MyExceptionHandler"/>
+	
+	<!-- 自定义参数类型绑定 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!-- 转换器 -->
+		<property name="converters">
+			<list>
+				<bean class="com.hz.converter.CustomDateConverter"/>
+				<bean class="com.hz.converter.StringTrimConverter"/>
+				<bean class="com.hz.converter.SpringMVCFileConverter"/>
+			</list>
+		</property>
+	</bean>
+	<!--配置基本的json数据格式  -->
+	<mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters register-defaults="true">
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    
+	 <!-- 自定义webBinder -->
+	 <bean id="customBinder" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="propertyEditorRegistrars">
+			<list>
+				<ref bean="customPropertyEditor"/>
+			</list>
+		</property>
+		<property name="conversionService" ref="conversionService" />
+	 </bean>
+     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
+     <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
+     
+     <!-- <mvc:annotation-driven /> -->
+     <!-- 注解的处理器映射器 -->
+     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+	<!--注解适配器适配器 -->
+     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		 <property name="webBindingInitializer" ref="customBinder"></property> 
+		  <property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+			</list>
+		 </property>
+	 </bean>
+	 
+	 <!--视图映射器  -->
+     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     	<property name="prefix" value="/WEB-INF/jsp/"/>
+     	<property name="suffix" value=".jsp"/>
+     </bean>
+     
+     <!--静态资源加载  -->
+    <mvc:resources mapping="/*/**.jpg" location="/img/" />
+	<mvc:resources mapping="/*/**.css" location="/css/" />  
+	<mvc:resources mapping="/*/**.gif" location="/date/" />
+	<mvc:resources mapping="/*/**.png" location="/img/" />
+	<mvc:resources mapping="/*/**.js" location="/js/" />
+	<mvc:resources mapping="/*/**.js" location="/date/" />
+	<mvc:resources mapping="/*/**.css" location="/date/" />
+	<mvc:resources mapping="/*/**.jpg" location="/upload/" />
+	<mvc:resources mapping="/*/**.png" location="/upload/" />
+	<mvc:resources mapping="/*/**.gif" location="/upload/" />
+	<mvc:resources mapping="/*/**.*" location="/style/" />
+	<mvc:resources mapping="/*/**.*" location="/script/" />
+	<mvc:resources mapping="/*/**.*" location="/images/" />
+	<mvc:resources mapping="/ueditorjsp/**.*" location="/ueditorjsp/" />
+</beans>

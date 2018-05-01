@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.ActivityContentMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.ActivityContent">
+    <id column="active_id" jdbcType="BIGINT" property="active_id" />
+    <result column="activeName" jdbcType="VARCHAR" property="activeName" />
+    <result column="activeContent" jdbcType="LONGVARCHAR" property="activeContent" />
+    <result column="startTime" jdbcType="DATE" property="startTime" />
+    <result column="endTime" jdbcType="DATE" property="endTime" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="imgFile" jdbcType="VARCHAR" property="imgFile" />
+    <result column="item_id" jdbcType="BIGINT" property="item_id" />
+    <result column="judgehot" jdbcType="BIGINT" property="judgehot" />
+    <!-- 指定联合查询的分类字段的封装 -->
+    <association  property="item" javaType="com.hz.entity.First_item">
+        <id column="item_id" jdbcType="INTEGER" property="item_id" />
+        <result column="item_name" jdbcType="VARCHAR" property="item_name" />
+    </association>
+  </resultMap>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <!--插入单个数据  -->
+  <insert id="insertActive" parameterType="com.hz.entity.ActivityContent">
+	insert into activeContent
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test='activeName != null'>
+			activeName,
+		</if>
+		<if test='activeContent != null'>
+			activeContent,
+		</if>
+		<if test='startTime != null'>
+			startTime,
+		</if>
+		<if test='endTime != null'>
+			endTime,
+		</if>
+		<if test='url != null'>
+			url,
+		</if>
+		<if test='imgFile != null'>
+			imgFile,
+		</if>
+		<if test='item_id != null'>
+			item_id,
+		</if>
+		<if test='judgehot != null'>
+			judgehot,
+		</if>
+	</trim> 
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+		<if test='activeName != null'>
+			#{activeName},
+		</if>
+		<if test='activeContent != null'>
+			#{activeContent},
+		</if>
+		<if test='startTime != null'>
+			#{startTime},
+		</if>
+		<if test='endTime != null'>
+			#{endTime},
+		</if>
+		<if test='url != null'>
+			#{url},
+		</if>
+		<if test='imgFile != null'>
+			#{imgFile},
+		</if>
+		<if test='item_id != null'>
+			#{item_id},
+		</if>
+		<if test='judgehot != null'>
+			#{judgehot},
+		</if>
+	</trim> 
+  </insert>
+ <!--更新查询数据  -->
+  <!-- <update id="updateItem" parameterType="com.hz.entity.First_item">
+  	update first_item set item_name=#{item_name}
+  </update>
+  
+  分页查询 
+  <select id="selectAllItem" parameterType="com.hz.entity.Page" resultMap="BaseResultMap">
+        select * from first_item limit #{startRow},#{pageSize}
+  </select>
+  查询搜索总数 
+  <select id="searchTotalCount" parameterType="com.hz.entity.Page" resultType="java.lang.Integer">
+        select count(item_id) from first_item <where>
+            <if test="queryCondition!=null">
+                and item_code=#{queryCondition}
+            </if>
+        </where>
+   </select>
+   条件搜索查询 
+   <select id="getInvBycondtion" parameterType="com.hz.entity.Page" resultMap="BaseResultMap">
+        select * from first_item
+         <where>
+            <if test="queryCondition!=null">
+                 item_name like  CONCAT('%',#{queryCondition},'%')
+            </if>
+        </where>
+    </select>
+  删除分类
+  <delete id="deleteItem" parameterType="com.hz.entity.First_item">
+  	delete from first_item where item_id=#{item_id}
+  </delete>
+  <select id="selectall" parameterType="com.hz.entity.First_item" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from first_item
+  </select>  -->
+  <sql id="Base_Column_List">
+  	a.active_id, a.activeName, a.startTime, a.endTime, a.imgFile, a.url, a.item_id, a.judgehot, f.item_name, a.activeContent
+  </sql>
+  
+  <!-- 带条件的多表查询 -->
+  <select id="selectAllActive" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        FROM activecontent a
+        LEFT JOIN first_item f ON a.item_id=f.item_id    
+  </select>
+  
+  <!--带条件的夺标查询分页  -->
+   <select id="findByPage" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List"/>
+  	FROM activecontent a 
+  	 LEFT JOIN first_item f ON a.item_id=f.item_id    
+  	<if test="startRow != null and pageSize != null">
+  		limit #{startRow} ,#{pageSize}
+  	</if>
+  </select>
+  <!--查询总记录数 -->
+  <select id="selectCount" parameterType="com.hz.util.PageBean"  resultType="java.lang.Integer">
+  	SELECT count(*) FROM activecontent
+  </select>
+  
+  
+  <!--条件搜索查询  -->
+   <select id="getActBycondtion" parameterType="com.hz.entity.Page" resultMap="BaseResultMap">
+        select 
+        <include refid="Base_Column_List" /> 
+       	FROM activecontent a
+        LEFT JOIN first_item f ON a.item_id=f.item_id 
+         <where>
+            <if test="item_id!=null">
+                a.item_id=#{item_id}
+            </if>
+        </where>
+    </select>
+    <!--删除活动  -->
+    <delete id="deleteActivd" parameterType="com.hz.entity.ActivityContent">
+  		delete from activecontent where active_id=#{active_id}
+  	</delete>
+  	<select id="selectActive" parameterType="com.hz.entity.ActivityContent" resultMap="BaseResultMap">
+  		select 
+        <include refid="Base_Column_List" /> 
+       	FROM activecontent a
+        LEFT JOIN first_item f ON a.item_id=f.item_id 
+         <where>
+            <if test="active_id!=null">
+                active_id=#{active_id}
+            </if>
+        </where>
+  	</select>
+  	<!--更新活动  -->
+  	<update id="updateActive" parameterType="com.hz.entity.ActivityContent">
+  	  update activecontent
+  	  <trim prefix="set" suffixOverrides=",">
+  	  <if test="activeName!=null">activeName=#{activeName},</if>
+	  <if test="startTime!=null">startTime=#{startTime},</if>
+	  <if test="endTime!=null">endTime=#{endTime},</if>
+	  <if test="imgFile!=null">imgFile=#{imgFile},</if>
+	  <if test="url!=null">url=#{url},</if>
+	  <if test="item_id!=null">item_id=#{item_id},</if>
+	  <if test="judgehot!=null">judgehot=#{judgehot},</if>
+	  <if test="activeContent!=null">activeContent=#{activeContent},</if>
+ 	</trim>
+ 		WHERE active_id=#{active_id}
+  	</update>
+  	
+  	<!-- 分类查询 -->
+  <select id="selectAllActiveById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        FROM activecontent a
+        LEFT JOIN first_item f ON a.item_id=f.item_id
+        <where>
+        	a.item_id=#{item_id}
+        </where>    
+  </select>
+  
+  <!--分类查询查询分页  -->
+   <select id="findByPageByid" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List"/>
+  	FROM activecontent a 
+  	LEFT JOIN first_item f ON a.item_id=f.item_id
+  	 <where> 
+	    <if test="item_id != null">
+	         a.item_id = #{item_id}
+	    </if> 
+  	</where>
+  	<if test="startRow != null and pageSize != null">
+  			limit #{startRow} ,#{pageSize}
+  	</if>  
+  </select>
+  <!--分类查询总记录数 -->
+  <select id="selectCountById" parameterType="com.hz.util.PageBean"  resultType="java.lang.Integer">
+  	SELECT count(*) FROM activecontent
+  	<where>
+  		item_id=#{item_id}
+  	</where>
+  </select>
+  	
+</mapper>

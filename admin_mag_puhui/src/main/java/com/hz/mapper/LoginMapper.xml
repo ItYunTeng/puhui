@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hz.mapper.LoginMapper">
+  <resultMap id="BaseResultMap" type="com.hz.entity.Admin_user">
+    <id column="admin_id" jdbcType="BIGINT" property="admin_id" />
+    <result column="admin_name" jdbcType="VARCHAR" property="admin_name" />
+    <result column="admin_pwd" jdbcType="VARCHAR" property="admin_pwd" />
+    <result column="admin_telephone" jdbcType="VARCHAR" property="admin_telephone"/>
+  </resultMap>
+  <!--parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集合返回结果，实体对象  -->
+  <sql id="Base_Column_List">
+    admin_id, admin_name, admin_pwd, admin_telephone
+  </sql>
+  <!--通过电话号码查询，电话是唯一的  --> 
+  <select id="loginAdminselect" parameterType="Map" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM admin_user
+    WHERE admin_telephone = #{admin_telephone} AND admin_pwd = #{admin_pwd}
+  </select>
+  <!--更新查询数据  -->
+  <update id="updateUser" parameterType="Map">
+  	update admin_user set admin_name=#{admin_name},admin_pwd=#{admin_pwd},admin_telephone=#{admin_telephone}
+  	where admin_id=#{admin_id}
+  </update>
+</mapper>
